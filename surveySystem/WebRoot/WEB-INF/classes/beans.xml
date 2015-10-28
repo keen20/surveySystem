@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 加aop，context，tx -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" 
+       xmlns:aop="http://www.springframework.org/schema/aop"
+  	   xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context        		
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+  		   http://www.springframework.org/schema/aop 
+  		   http://www.springframework.org/schema/aop/spring-aop-2.5.xsd"> 
+  	 					<!--属相占位符扫描 -->
+  	<context:property-placeholder location="classpath:jdbc.properties"/>
+  						<!-- 自动扫描bean -->
+  	<context:component-scan base-package="com.survey.dao.impl,com.survey.service.impl,com.survey.struts2.action"></context:component-scan>
+  						<!-- 数据源bean -->
+  	<!--dbcp:class="org.apache.commons.dbcp.BasicDataSource"-->
+  	<!--c3p0:class="com.mchange.v2.c3p0.ComboPooledDataSource"-->
+  	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+  	<property name="driverClass" value="${driverClass}"/>
+  	<property name="jdbcUrl" value="${jdbcUrl}"/>
+  	<property name="user" value="${username}"/>
+  	<property name="password" value="${password}"/>
+  	<property name="maxPoolSize" value="${maxPoolSize}"/>
+  	<property name="minPoolSize" value="${minPoolSize}"/>
+  	<property name="initialPoolSize" value="${initialPoolSize}"/>
+  	<property name="acquireIncrement" value="${acquireIncrement}"/><!--增量  -->
+  	</bean>
+  						<!-- 本地会话工厂bean，是spring整合hibernate的核心入口 -->
+  	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+  	<property name="dataSource" ref="dataSource"></property>
+  						<!-- hibernate自身属性配置 -->
+     <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+     <property name="mappingDirectoryLocations">
+     <list>
+     <value>classpath:com/survey/model</value>
+     </list>
+     </property>
+  	</bean>
+  						<!-- hibernate事务管理器，在service层管理事务，达到平台无关性 -->
+  	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+  	<property name="sessionFactory" ref="sessionFactory"/>
+  	</bean>
+  						<!--事务通知  -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+						<!--事务属性集  -->
+	<tx:attributes>
+						<!--写操作  -->
+	<tx:method name="save*" propagation="REQUIRED" isolation="DEFAULT"/>
+	<tx:method name="delete*" propagation="REQUIRED" isolation="DEFAULT"/>
+	<tx:method name="update*" propagation="REQUIRED" isolation="DEFAULT"/>
+	<tx:method name="batch*" propagation="REQUIRED" isolation="DEFAULT"/>
+	
+						<!-- 读操作-->
+	<tx:method name="load*" propagation="REQUIRED" isolation="DEFAULT" read-only="true"/>
+	<tx:method name="find*" propagation="REQUIRED" isolation="DEFAULT" read-only="true"/>
+	<tx:method name="get*" propagation="REQUIRED" isolation="DEFAULT" read-only="true"/>
+						<!-- 为了以防万一写的方法名没有以以上的开头 ，用通配-->
+	<tx:method name="*" propagation="REQUIRED" isolation="DEFAULT"/>
+	</tx:attributes>
+	</tx:advice>
+  						<!--aop配置  -->
+	<aop:config>
+				<!-- 切入点 -->
+	<aop:advisor advice-ref="txAdvice" pointcut="execution(* *..*Service.*(..))"/>
+	</aop:config>  						
+  						
+  						
+  						
+  	
+  	
+ </beans>

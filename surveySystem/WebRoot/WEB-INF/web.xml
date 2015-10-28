@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<display-name>surveySystem</display-name>
+	
+	<!--通过上下文参数配置spring文件的位置  -->
+	<context-param>
+	<param-name>contextConfigLocation</param-name>
+	<param-value>classpath:beans.xml</param-value>
+	</context-param>
+	
+	<!--上下文载入监听器，确保当web服务一启动，直接完成spring容器的初始化  -->
+	<listener>
+	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- openSessionInViewFilter,改过滤器在view渲染时始终开启session,一劳永逸解决hibernate的懒加载问题,
+	     该过滤器必须配置在struts2过滤器之前,不推荐使用(性能问题)	
+	<filter>
+		<filter-name>openSessionInViewFilter</filter-name>
+		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>openSessionInViewFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>-->
+	
+	<!--配置struts2的過濾器  -->
+	<filter>
+		<filter-name>action</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>action</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>

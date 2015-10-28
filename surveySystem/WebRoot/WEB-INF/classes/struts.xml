@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   <!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.1//EN"
+	"http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.action.extension" value="do,action" />
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<!--改变struts主题，默认struts.ui.theme=xhtml 以表格方式修饰页面-->
+	<constant name="struts.ui.theme" value="simple"></constant>
+
+	<package name="surveySystem" namespace="/" extends="struts-default">
+		<!-- 定义拦截器 -->
+		<interceptors>
+		<!--注册登录拦截器  -->
+		<interceptor name="LoginInterceptor" class="com.survey.interceptor.LoginInterceptor"/>
+		<!-- 定义拦截器栈 -->
+		<interceptor-stack name="interceptorStack">
+		<interceptor-ref name="LoginInterceptor"></interceptor-ref>
+		<interceptor-ref name="defaultStack">
+		<param name="modelDriven.refreshModelBeforeResult">true</param>
+		</interceptor-ref>
+		</interceptor-stack>
+		</interceptors>
+		<!-- 设置默认栈 -->
+		<default-interceptor-ref name="interceptorStack"></default-interceptor-ref>
+		<!-- 定义一个全局路由结果，避免拦截到每个action都指定 -->
+		<global-results>
+		<result name="login">/index.jsp</result>
+		</global-results>
+		<!--regAction -->
+		<action name="RegAction_*" class="regAction" method="{1}">
+			<result name="regPage">/reg.jsp</result>
+			<result name="input">/reg.jsp</result>
+			<result name="success">/index.jsp</result>
+		</action>
+		
+		<!-- LoginAction -->
+		<action name="LoginAction_*" class="loginAction" method="{1}">
+			<result name="loginPage">/index.jsp</result>
+			<result name="input">/index.jsp</result>
+			<result name="success">/index.jsp</result>
+		</action>
+		
+		<!-- SurveyAction -->
+		<action name="SurveyAction_*" class="surveyAction" method="{1}">
+			<result name="mySurveyListPage">/mySurveyList.jsp</result>
+			<result name="designSurveyPage">/designSurvey.jsp</result>
+			<result name="success">/index.jsp</result>
+		</action>
+	</package>
+</struts>

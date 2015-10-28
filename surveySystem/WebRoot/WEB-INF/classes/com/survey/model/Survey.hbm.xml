@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+    <hibernate-mapping package="com.survey.model">
+    <class name="Survey" table="surveys" lazy="true">
+    <id name="id" column="id" type="integer">
+    <generator class="native"></generator>
+    </id>
+    <property name="title" column="title" type="string" length="50"/>
+    <property name="preText" column="preText" type="string" length="50"/>
+    <property name="nextText" column="nextText" type="string" length="50"/>
+    <property name="exitText" column="exitText" type="string" length="50"/>
+    <property name="doneText" column="doneText" type="string" length="50"/>
+    <property name="createTime" column="createTime" type="timestamp" update="false"/>
+    <!-- 建立用户调查单向一对多关联 -->
+    <many-to-one name="user" class="User" column="userid"/>
+    <!-- 建立调查到页面双向一对多关联 -->
+    <set name="pages" inverse="true" lazy="true">
+     <key column="surveyid"></key>
+    <one-to-many class="Page"></one-to-many>
+    </set>
+    </class>
+    </hibernate-mapping>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+    <hibernate-mapping package="com.survey.model">
+    <class name="Question" table="questions" lazy="true">
+    <id name="id" column="id" type="integer">
+    <generator class="native"></generator>
+    </id>
+    <!--建立question到page的多对一双向关联  -->
+    <many-to-one name="page" class="Page" column="pageid"></many-to-one>
+    </class>
+    </hibernate-mapping>
