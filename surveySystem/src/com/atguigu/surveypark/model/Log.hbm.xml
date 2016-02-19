@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.atguigu.surveypark.model">
+	<class name="Log" table="logs">
+		<id name="id" column="id" type="string">
+			<generator class="uuid" />
+		</id>
+		<property name="operator" column="operator" type="string" length="100" />
+		<property name="operName" column="opername" type="string" length="100" />
+		<property name="operParams" column="operparams" type="string" length="500" />
+		<property name="operResult" column="operresult" type="string" length="50" />
+		<property name="resultMsg" column="resultmsg" type="string" length="500" />
+		<property name="operTime" column="opertime" type="timestamp" />
+	</class>	
+</hibernate-mapping>    

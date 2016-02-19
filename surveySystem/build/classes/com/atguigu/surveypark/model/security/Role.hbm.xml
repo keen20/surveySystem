@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.atguigu.surveypark.model.security">
+	<class name="Role" table="roles">
+		<id name="id" column="id" type="integer">
+			<generator class="identity" />
+		</id>
+		<property name="roleName" column="rolename" type="string" length="50" />
+		<property name="roleDesc" column="roledesc" type="string" length="200" />
+		<property name="roleValue" column="rolevalue" type="string" length="20" />
+		
+		<!-- 映射role到Right之间多对多关联关系 -->
+		<set name="rights" table="role_right_link" lazy="false">
+			<key column="roleid" />
+			<many-to-many class="Right" column="rightid" />
+		</set>
+	</class>
+</hibernate-mapping>
